@@ -44,10 +44,14 @@ app.get("/logout",( req,res) => {
 app.post("/register" , async (req,res) => {
     try {
      const user = await User.findOne({username : req.body.username})
-     if(user) return res.status(4000).send("user already exsist");
-     const newUser = new User(req.body);
-     await newUser.save();
-     res.status(201).redirect("/login")
+     if(user){
+        res.status(400).send("user already exsist");
+     }else{
+        const newUser = new User(req.body);
+        await newUser.save();
+        res.status(201).redirect("/login")
+     }
+   
         
     } catch (error) {
         res.status(500).send(error.message)
